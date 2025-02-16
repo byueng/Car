@@ -29,6 +29,7 @@ The root folder is `./car_trade`
 
 # environment setup
 ## Backend Python
+**All the prerequisites(前提): python 3.13.1**
 - First, create a virtual environment by `python -m venv <virtual name>`. If OS is Windows, then use `./<virtual name>/Scripts/Activate.ps1` in the folder which has ran the command of create virual environment, and use `source ./<virtual name>/bin/activate` in Linux.
 - Second, install the third libaray by command `pip install -r requirements`, this command must be ran in the place where *requirements.txt* in.
 - When install correctly, use `pip list` to viladate the status.
