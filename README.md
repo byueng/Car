@@ -35,20 +35,29 @@ The root folder is `./car_trade`
 - When install correctly, use `pip list` to viladate the status.
 > All backend writen in `car_backend` folder and use django.
 
-## Front Vue
+## backend x front
 
+
+## Front Vue
+- First, install Node.js. [https://nodejs.org/zh-cn](https://nodejs.org/zh-cn)
+```bash
+npm install -g @vue/cli
+vue create my-project
+```
+All configurations are default.Then just run `npm run serve` and click the url.
+- When modify the code, `npm run build` is needed.
 
 ## Mysql
-First, it must install **MySQL**, create relevant information in mysql:
-- In windows, it should run `net start mysql`, you need add `<mysql absolute path>/bin` in environment variables when the command errors.
-- Then, run `mysql -u <username> -p` then input password.
+- First, it must install **MySQL**, create relevant information in mysql:
+In windows, it should run `net start mysql`, you need add `<mysql absolute path>/bin` in environment variables when the command errors.
+Then, run `mysql -u <username> -p` then input password.
 ```mysql
 create user 'username'@'%' identified by '';
 grant all privileges on *.* to 'username'@'%';
 flush privileges;
 ```
 
-Second, the settings file located in `./car_trade/car_backend/car/settings.py` in 78 lines. If want to modify, here's example:
+- Second, the settings file located in `./car_trade/car_backend/car/settings.py` in 78 lines. If want to modify, here's example:
 ```python
 DATABASES = {
      'default': {
@@ -63,6 +72,6 @@ DATABASES = {
 ```
 Or use the default `settings.py`.
 
-Third, run django server which says in Paragraph 1 **How to use** to validate whether mysql connect correctly.
+- Third, run django server which says in Paragraph 1 **How to use** to validate whether mysql connect correctly.
 If connections went right, then run command `python manage.py makemigrations` and `python manage.py migrate`
 

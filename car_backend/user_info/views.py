@@ -12,4 +12,5 @@ def test(request):
 
 # user login view
 def login(request):
-    pass
+    user_data = request.data
+    return JsonResponse(user_data)
