@@ -1,15 +1,16 @@
-<template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <UserLogin msg=""/>
+ <template>
+  <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
+  <HomePage msg="front going on!"/>
 </template>
 
 <script>
-import UserLogin from './components/UserLogin.vue'
+
+import HomePage from './components/HomePage.vue';
 
 export default {
   name: 'App',
   components: { 
-    UserLogin,  
+    HomePage,
   }
 }
 </script>
