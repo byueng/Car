@@ -36,9 +36,10 @@
             username: this.username,
             password: this.password,
           });
-  
+
           if (response.status === 200) {
             const data = response.data;
+            console.log('Response from backend:', data);
             // 登录成功，存储 token 到 localStorage
             localStorage.setItem('token', data.token);
             this.$router.push('/dashboard'); // 登录成功后跳转到仪表盘页面

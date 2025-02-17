@@ -1,11 +1,10 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
-  <UserLogin msg="Welcome to Your Vue.js App"/>
+  <UserLogin msg=""/>
 </template>
 
 <script>
 import UserLogin from './components/UserLogin.vue'
-// import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   name: 'App',

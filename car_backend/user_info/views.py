@@ -22,5 +22,8 @@ def login(request):
         body_unicode = request.body.decode('utf-8')
         body:dict[str: str] = loads(body_unicode)
         username = body['username']
-
-        return HttpResponse(username)
+        
+        return JsonResponse(
+            {'username': username},
+            status = 200
+        )
