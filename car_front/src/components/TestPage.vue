@@ -1,7 +1,7 @@
 <template>
     <div class="test-page">
-      <h2>Test Page</h2>
-      <p>Congratulations! You have successfully navigated to the Test page.</p>
+      <h2>测试页面</h2>
+      <p>测试成功</p>
     </div>
 </template>
   

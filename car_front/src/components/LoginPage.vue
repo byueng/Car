@@ -1,71 +1,70 @@
 <template>
     <div class="login-container">
-      <h2>Login to Second-Hand Car Trading Platform</h2>
+      <h2>登录二手车交易平台</h2>
       <form @submit.prevent="handleLogin">
         <div>
-          <label for="Account">Account</label>
-          <input type="text" v-model="Account" id="Account" required />
+          <label for="account">账号</label>
+          <input type="text" v-model="account" id="account" required />
         </div>
         <div>
-          <label for="password">Password</label>
+          <label for="password">密码</label>
           <input type="password" v-model="password" id="password" required />
         </div>
         <button type="submit">Login</button>
         <div>
-          <button type="register button" class="register-button" @click="RegisterLogin">No user? Register new one.</button>
+          <button type="register button" class="register-button" @click="RegisterLogin">没有用户？创建一个新的</button>
         </div>
       </form>
       <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
     </div>
   </template>
   
-  <script>
-  // 导入 axios
-  import axios from 'axios';
-  
-  export default {
-    data() {
-      return {
-        Account: '',
-        password: '',
-        errorMessage: '',
-      };
-    },
-    methods: {
-      async handleLogin() {
+<script>
+// 导入 axios
+import axios from 'axios';
 
-        const AddressConfig = await axios.get("/config.json");
-        const address = AddressConfig.data['local_address']
+export default {
+  data() {
+    return {
+      account: '',
+      password: '',
+      errorMessage: '',
+    };
+  },
+  methods: {
+    async handleLogin() {
 
-        try {
-          // 使用 axios 向 Django 后端发送请求
-          const response = await axios.post(address + '/user/login/', {
-            Account: this.Account,
-            password: this.password,
-          });
+      const AddressConfig = await axios.get("/config.json")
+      const address = AddressConfig.data['local_address']
 
-          if (response.status === 200) {
-            const data = response.data;
-            console.log('Response from backend:', data);
-            // 登录成功，存储 token 到 localStorage
-            localStorage.setItem('token', data.token);
-            this.$router.push('/dashboard'); // 登录成功后跳转到仪表盘页面
-          }
-        } catch (error) {
-          // 处理请求错误
-          if (error.response) {
-            this.errorMessage = error.response.data.detail || 'Login failed. Please try again.';
-          } else {
-            this.errorMessage = 'Something went wrong. Please try again later.';
-          }
+      try {
+        // 使用 axios 向 Django 后端发送请求
+        const response = await axios.post(address + '/user/login/', {
+          account: this.account,
+          password: this.password,
+        });
+
+        if (response.status === 200) {
+          const data = response.data;
+          // 登录成功，存储 token 到 localStorage
+          localStorage.setItem('token', data.token);
+          this.$router.push('/dashboard'); // 登录成功后跳转到仪表盘页面
         }
-      },
-      RegisterLogin(){
-        this.$router.push('/user/register')
-      },
-    }
-  };
-  </script>
+      } catch (error) {
+        // 处理请求错误
+        if (error.response) {
+          this.errorMessage = error.response.data.detail || '登录失败，请重试';
+        } else {
+          this.errorMessage = '出错了，请稍后再试';
+        }
+      }
+    },
+    RegisterLogin(){
+      this.$router.push('/user/register')
+    },
+  }
+};
+</script>
   
 <style scoped>
 /* 这里添加一些基本样式 */

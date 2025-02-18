@@ -10,5 +10,9 @@
 
 from json import loads
 
+
+# load the request body
 def load_body(body) -> dict[str: str]:
-    return loads(body.decode('utf-8'))
+    data = loads(body.decode('utf-8'))
+    return data
+

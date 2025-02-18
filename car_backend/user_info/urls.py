@@ -13,4 +13,5 @@ from .views import *
 urlpatterns = [
     path("test/", test),
     path("login/", login), 
+    path("register/", register),
 ]

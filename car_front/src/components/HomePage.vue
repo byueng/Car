@@ -2,10 +2,10 @@
 <template>
     <h1></h1>
     <div>
-        <button v-if="$route.path == '/'" class="login-button" @click="goToLogin">Login</button>
+        <button v-if="$route.path == '/'" class="login-button" @click="goToLogin">登录</button>
     </div>
     <div>
-        <button v-if="$route.path == '/'" class="test-button" @click="goToTest">Test</button>
+        <button v-if="$route.path == '/'" class="test-button" @click="goToTest">测试</button>
     </div>
     <!-- 安装路由 -->
     <router-view></router-view>
