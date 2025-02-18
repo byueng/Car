@@ -1,20 +1,13 @@
 # built-in libaray
 import time 
-from json import loads
 
 # django libaray
 from .models import *
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-
-class search_sql_table:
-    '''
-    Usage for all mysql calculate with django
-    '''
-    def __init__(self):
-        pass
-
+# other python files
+from .data_process import *
 
 
 # test view 
@@ -25,9 +18,20 @@ def test(request):
 @csrf_exempt
 def login(request):
     if request.method == 'POST':
-        body_unicode = request.body.decode('utf-8')
-        body:dict[str: str] = loads(body_unicode)
+        body = load_body(request.body)
         
         return JsonResponse(
-
+            body,
+            status = 200
         )
+
+
+@csrf_exempt
+def register(request):
+    if request.method == 'POST':
+        body = load_body(request.body)      
+
+        return JsonResponse(
+            body
+        )
+    

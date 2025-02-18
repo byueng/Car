@@ -12,6 +12,7 @@
 </template>
   
 <script>
+import axios from 'axios';
 export default {
   name: 'RegisterPage',
   data() {
@@ -22,7 +23,10 @@ export default {
   },
   methods: {
     async handleregister(){
-      
+      const AddressConfig = await axios.get("/config.json");
+      const address = AddressConfig.data['local_address'];
+      const response = await axios.post(address + '/user/register');
+      console.log(response);
     },
     register() {
       this.$router.push('/user/login')

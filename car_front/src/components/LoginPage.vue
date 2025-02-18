@@ -29,7 +29,6 @@
         Account: '',
         password: '',
         errorMessage: '',
-        status: ''
       };
     },
     methods: {
@@ -43,7 +42,6 @@
           const response = await axios.post(address + '/user/login/', {
             Account: this.Account,
             password: this.password,
-            status: 'login'
           });
 
           if (response.status === 200) {
