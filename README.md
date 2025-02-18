@@ -40,11 +40,12 @@ The root folder is `./car_trade`
 
 ## Front Vue
 - First, install Node.js. [https://nodejs.org/zh-cn](https://nodejs.org/zh-cn)
+Test code below:
 ```bash
 npm install -g @vue/cli
 vue create my-project
 ```
-All configurations are default.Then just run `npm run serve` and click the url.
+- For this project, all configurations are default.Then just run `npm run serve` and click the url.
 - When modify the code, `npm run build` is needed.
 
 ## Mysql
