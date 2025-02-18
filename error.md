@@ -5,4 +5,4 @@
 
 # Page doesn't remove wrong
 - Error: The error manifests as: after clicking the navigation button, the URL updates, but the page content doesn't change accordingly. This usually happens because the parent component (e.g., Homepage.vue) is not properly unmounted or updated, causing the new component to not render correctly.
-- Fix:
+- Fix: Use `router` tag: `v-if="$route.path == '/'"` to check out the url.

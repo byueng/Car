@@ -19,10 +19,10 @@
         },
         methods: {
             goToLogin(){
-                this.$router.push('/login');
+                this.$router.push('/user/login');
             },
             goToTest(){
-                this.$router.push('/test');
+                this.$router.push('/user/test');
             },
         }
     }
