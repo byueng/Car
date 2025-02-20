@@ -31,9 +31,7 @@ export default {
   },
   methods: {
     async handleRegister() {
-      const AddressConfig = await axios.get("/config.json")
-      const address = AddressConfig.data['local_address']
-      console.log(address)
+      const address = this.$config.local_address
       if (this.password !== this.confirm_password) {
         this.message = '两次的密码不同'
         this.messageType = 'error'

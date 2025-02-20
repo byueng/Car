@@ -1,6 +1,5 @@
 from django.db import models
 
-# Create your models here.
 class User(models.Model):
     account = models.CharField(
         max_length = 12,
@@ -13,6 +12,18 @@ class User(models.Model):
         help_text = "Login user name",
         null = True,   
         )
-
     
+    def __str__(self):
+        return self.account
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    phone = models.CharField(max_length=15, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    birthdate = models.DateField(blank=True, null=True)
+
+    def __str__(self):
+        return self.user.account
+
     
