@@ -43,7 +43,6 @@ export default {
           account: this.account,
           password: this.password,
         });
-
         if (response.status === 200) {
           const data = response.data;
           // 登录成功，存储 token 到 localStorage

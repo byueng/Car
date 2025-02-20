@@ -49,7 +49,6 @@ export default {
           account: this.account,
           password: this.password
         })
-        console.log(response.data['message'])
         if (response.status === 201) {
           this.message = response.data['message']
           this.messageType = 'success'
@@ -57,7 +56,7 @@ export default {
             this.$router.push('/user/login')
           }, 2000)
         } else {
-          this.message = '注册失败，请重试'
+          this.message = response.data['message']
           this.messageType = 'error'
         }
       } catch (error) {

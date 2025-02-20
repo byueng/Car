@@ -29,7 +29,11 @@ def login(request):
 
     if request.method == 'POST':
         body = load_body(request.body)
+        account = body['account']
+        password = body['password']
         
+        flag = User.objects.filter(account=account).exists()        
+
         return JsonResponse(
             body,
             status = 200
@@ -45,7 +49,6 @@ def register(request):
     {
         "account": "user_account",
         "password": "user_password",
-        "confirm_password": "user_confirm_password"
     }
 
     :param request: Http request object
@@ -56,10 +59,13 @@ def register(request):
         body = load_body(request.body)     
         account = body['account']
         password = body['password']
-
-        user = User(account=account, password=password)
-        user.save()
-        return JsonResponse({'message': '用户创建成功'}, status=201)
+        flag = User.objects.filter(account=account).exists()        
+        if flag:
+            return JsonResponse({'message': '创建失败，新建用户名已存在，请重试'}, status=200)
+        else:
+            user = User(account=account, password=password)
+            user.save()
+            return JsonResponse({'message': '用户创建成功，2秒后自动跳转到登录界面'}, status=201)
     else:
         return JsonResponse({'message': 'Invalid request method'}, status=405)
     

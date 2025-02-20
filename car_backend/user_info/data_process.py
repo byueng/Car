@@ -9,10 +9,24 @@
 """
 
 from json import loads
+from .models import User
 
 
-# load the request body
 def load_body(body) -> dict[str: str]:
+    '''
+    Load the request body
+    '''
     data = loads(body.decode('utf-8'))
     return data
 
+def table_element_check(account: str):
+    '''
+    Check whether the element in the table of backend database.
+
+    Excepted account format: "account"
+    
+    :param account: The account to check in the database
+    :return: True if the account exists, False otherwise
+    '''
+    return User.objects.filter(account=account).exists()
+    
