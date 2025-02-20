@@ -15,7 +15,9 @@
           <button type="register button" class="register-button" @click="RegisterLogin">没有用户？创建一个新的</button>
         </div>
       </form>
-      <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+      <div v-if="message" :class="messageType" class="message">
+      {{ message }}
+    </div>
     </div>
   </template>
   
@@ -28,8 +30,9 @@ export default {
     return {
       account: '',
       password: '',
-      errorMessage: '',
-    };
+      message: '',
+      messageType: ''
+    }
   },
   methods: {
     async handleLogin() {
@@ -42,27 +45,25 @@ export default {
         const response = await axios.post(address + '/user/login/', {
           account: this.account,
           password: this.password,
-        });
-        if (response.status === 200) {
-          const data = response.data;
+        })
+        if (response.status === 201) {
+          const data = response.data
           // 登录成功，存储 token 到 localStorage
-          localStorage.setItem('token', data.token);
-          this.$router.push('/dashboard'); // 登录成功后跳转到仪表盘页面
+          localStorage.setItem('token', data.token)
+          this.message = response.data['message']
+          this.messageType = 'success'
+          setTimeout(() => {
+            this.$router.push('/')
+          }, 2000)
         }
       } catch (error) {
         // 处理请求错误
-        if (error.response) {
-          this.errorMessage = error.response.data['error'] || '登录失败，请重试';
-        } else {
-          this.errorMessage = '出错了，请稍后再试';
+        this.message = error.response.data['message']
+        this.messageType = 'error'
         }
       }
-    },
-    RegisterLogin(){
-      this.$router.push('/user/register')
-    },
-  }
-};
+    }
+}
 </script>
   
 <style scoped>
@@ -116,9 +117,21 @@ button:hover {
   background-color: #218838;
 }
 
+.message {
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
 .error {
-  color: red;
-  font-size: 14px;
-  margin-top: 10px;
+  background-color: #f8d7da;
+  color: #721c24;
 }
 </style>

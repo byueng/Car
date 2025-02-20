@@ -33,9 +33,10 @@ def login(request):
         password = body['password']
         try:
             user = User.objects.get(account=account)  # 查询数据库
-            # 返回用户信息
-            return JsonResponse({'account': user.account, 'password': user.password})
-        
+            if password == user.password:
+                return JsonResponse({'message': '登录成功，2秒后跳转到主页'}, status=201)
+            else:
+                return JsonResponse({'message': '密码错误，请重试'}, status=404)        
         except User.DoesNotExist:
             return JsonResponse({'message': 'User not found'}, status=404)       
     else:
@@ -43,6 +44,8 @@ def login(request):
 
 
 
+
+# complete
 @csrf_exempt
 def register(request):
     '''
