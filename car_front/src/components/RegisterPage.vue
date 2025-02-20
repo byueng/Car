@@ -55,12 +55,9 @@ export default {
           setTimeout(() => {
             this.$router.push('/user/login')
           }, 2000)
-        } else {
-          this.message = response.data['message']
-          this.messageType = 'error'
         }
       } catch (error) {
-        this.message = '注册过程中发生错误，请稍后再试'
+        this.message = error.response.data['message']
         this.messageType = 'error'
       }
     },

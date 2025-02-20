@@ -52,7 +52,7 @@ export default {
       } catch (error) {
         // 处理请求错误
         if (error.response) {
-          this.errorMessage = error.response.data.detail || '登录失败，请重试';
+          this.errorMessage = error.response.data['error'] || '登录失败，请重试';
         } else {
           this.errorMessage = '出错了，请稍后再试';
         }
