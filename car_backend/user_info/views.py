@@ -26,6 +26,7 @@ def test(request):
 class ProfileView(APIView):
     # permission_classes = [IsAuthenticated]  
 
+    # complete
     @csrf_exempt
     def get(self, request):
         '''
@@ -44,7 +45,7 @@ class ProfileView(APIView):
         account = request.GET.get('account')
         try:
             if not account:
-                return JsonResponse({"message": "用户不存在"}, status=404)
+                return Response({"message": "用户不存在"}, status=404)
             else:
                 user = User.objects.get(account=account)
                 profile = Profile.objects.get(user=user)
@@ -68,13 +69,15 @@ class ProfileView(APIView):
         :param request: Http request object
         :return Respone: Json type respone with status 200 if successfully
         '''
-        profile = Profile.objects.get(user=request.user)
-        serializer = ProfileSerializer(profile, data=request.data)
-        if serializer.is_valid():
-            serializer.save()  
-            return Response(serializer.data)
-        return Response(serializer.errors, status=400)
-
+        body = loads(request.body.decode('utf-8')) 
+        user = User.objects.get(account=body['account'])
+        profile = Profile.objects.get(user=user)
+        profile.phone = body['phone']
+        profile.email = body['email']
+        profile.birthdate = body['birthdate']
+        profile.save()
+        serializers = ProfileSerializer(profile)
+        return Response(serializers.data, status=200)
 
 # complete
 @csrf_exempt
