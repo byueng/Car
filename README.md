@@ -1,6 +1,5 @@
 # How to use
-- In car_trade folder, `python .\car_backend\manage.py runserve <port [int]>`
-- Or in car_backend folder, `python manage.py runserve <port [int]>`
+- In car_backend folder, `python manage.py runserve <port [int]>`
 ```bash
 System check identified no issues (0 silenced).
 February 16, 2025 - 20:54:24
@@ -52,6 +51,7 @@ vue create my-project
 - First, it must install **MySQL**, create relevant information in mysql:
 In windows, it should run `net start mysql`, you need add `<mysql absolute path>/bin` in environment variables when the command errors.
 Then, run `mysql -u <username> -p` then input password.
+- attion: <username> is what you want to name, and all `username` after this line will replace the name you spell. For example, if the <username> is `byun`, then, all username will replace to `byun`(this is what I named).
 ```mysql
 create user 'username'@'%' identified by '';
 grant all privileges on *.* to 'username'@'%';

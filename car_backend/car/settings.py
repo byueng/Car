@@ -86,7 +86,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'car.wsgi.application'
-
+APPEND_SLASH=False
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases

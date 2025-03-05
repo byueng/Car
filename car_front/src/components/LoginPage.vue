@@ -12,6 +12,9 @@
       </div>
       <button type="submit">Login</button>
       <div>
+        <button type="forget button" class="forget-password-button" @click="ForgetPassword">忘记密码?</button>
+      </div>
+      <div>
         <button type="register button" class="register-button" @click="RegisterLogin">没有用户？创建一个新的</button>
       </div>
     </form>
@@ -62,7 +65,10 @@ methods: {
     },
     RegisterLogin() {
       this.$router.push('/user/register')
-    }
+    },
+    ForgetPassword() {
+      this.$router.push('/user/forget')
+    },
   },
 }
 </script>
@@ -70,69 +76,78 @@ methods: {
 <style scoped>
 /* 这里添加一些基本样式 */
 .login-container {
-width: 300px;
-margin: auto;
-padding: 20px;
-border: 1px solid #ccc;
-border-radius: 5px;
+  width: 300px;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 form {
-display: flex;
-flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 input {
-margin-bottom: 10px;
-padding: 8px;
-border: 1px solid #ddd;
-border-radius: 4px;
+  margin-bottom: 10px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 
 button {
-padding: 10px;
-background-color: #4caf50;
-color: white;
-border: none;
-border-radius: 4px;
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
 }
 
 button:hover {
-background-color: #45a049;
+  background-color: #45a049;
 }
 
 .register-button {
-position: fixed;
-bottom: 20px;
-right: 20px;
-padding: 10px 20px;
-background-color: #28a745;
-color: white;
-border: none;
-border-radius: 5px;
-font-size: 16px;
-cursor: pointer;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 .register-button:hover {
-background-color: #218838;
+  background-color: #218838;
+}
+
+.forget-password-button {
+  display: block;
+  margin-top: 10px;
+  margin-left: auto;
+  color: blue;
+  cursor: pointer;
+  /* text-decoration: underline; */
 }
 
 .message {
-margin-top: 20px;
-padding: 10px;
-border-radius: 5px;
-font-weight: bold;
-text-align: center;
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  text-align: center;
 }
 
 .success {
-background-color: #d4edda;
-color: #155724;
+  background-color: #d4edda;
+  color: #155724;
 }
 
 .error {
-background-color: #f8d7da;
-color: #721c24;
+  background-color: #f8d7da;
+  color: #721c24;
 }
 </style>

@@ -6,6 +6,7 @@ import LoginPage from './components/LoginPage.vue';
 import TestPage from './components/TestPage.vue';
 import RegisterPage from './components/RegisterPage.vue';
 import ProfilePage from './components/ProfilePage.vue';
+import ForgetPassword from './components/ForgetPassword.vue';
 // third 
 import axios from 'axios';
 
@@ -31,6 +32,11 @@ const routes = [
     path: '/user/profile',
     component: ProfilePage
   },
+  {
+    path: '/user/forget',
+    component: ForgetPassword
+  },
+  
 ]
 
 const router = createRouter({

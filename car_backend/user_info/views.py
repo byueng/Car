@@ -141,3 +141,29 @@ def register(request):
     else:
         return JsonResponse({'message': '错误的请求类型'}, status=405)
     
+@csrf_exempt
+def forget_password(request):
+    """
+    forget password api
+    Expected body format:
+    {
+        account: "user who forget password",
+        newPassword: "new password",
+        confirmPassword: "confirm new password"
+    }
+    """
+    if request.method == 'POST':
+        body = loads(request.body.decode('utf-8'))
+        account = body['account']
+        newPassword = body['newPassword']
+        try:
+            user = User.objects.get(account=account)
+            user.password = newPassword
+            user.save()
+            return JsonResponse({'message': '密码修改成功, 两秒后跳转到登陆界面'}, status=201)
+
+        except User.DoesNotExist:
+            return JsonResponse({'message': '用户不存在'}, status=404)
+    else:
+        return JsonResponse({'message': 'Invalid request method'}, status=405)
+
