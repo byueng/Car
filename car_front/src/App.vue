@@ -1,7 +1,10 @@
- <template>
-  <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
-  <HomePage msg="front going on!"/>
+<template>
+  <div>
+    <HomePage v-if="$route.path === '/'" />
+    <router-view v-else />
+  </div>
 </template>
+
 
 <script>
 
@@ -9,7 +12,7 @@ import HomePage from './components/HomePage.vue';
 
 export default {
   name: 'App',
-  components: { 
+  components: {
     HomePage,
   }
 }
