@@ -67,7 +67,8 @@ REST_FRAMEWORK = {
 
 CORS_ALLOW_ALL_ORIGINS = True  # 或者你可以指定允许的域
 
-ROOT_URLCONF = 'car.urls'
+ROOT_URLCONF = 'car.urls' 
+MEDIA_URL = '/media/'
 
 TEMPLATES = [
     {

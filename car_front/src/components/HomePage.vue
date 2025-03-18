@@ -26,6 +26,7 @@
           </div>
         </div>
       </div>
+      <button class="btn" @click="goToCarMangement">进入车辆管理后台</button>
     </div>
 
     <!-- 交易管理 -->
@@ -40,19 +41,17 @@
       <button class="btn" @click="goToAdmin">进入管理后台</button>
     </div>
   </div>
-  <router-view></router-view>
+  <!-- <router-view></router-view> -->
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   data() {
     return {
       searchQuery: "",
       isAdmin: false, // 假设从后端获取权限
-      cars: [
-        { id: 1, brand: "Toyota", model: "Camry", price: 15, age: 3, image: "car1.jpg" },
-        { id: 2, brand: "Honda", model: "Civic", price: 12, age: 2, image: "car2.jpg" }
-      ]
+      cars: []
     };
   },
   computed: {
@@ -65,6 +64,14 @@ export default {
     }
   },
   methods: {
+    async fetchCars() {
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/car/info/");
+        this.cars = response.data;
+      } catch (error) {
+        console.error("获取车辆信息失败:", error);
+      }
+    },
     goToLogin() {
       this.$router.push("/user/login");
     },
@@ -72,14 +79,20 @@ export default {
       this.$router.push("/user/test");
     },
     bookCar(id) {
-      alert(`预约成功，车辆ID: ${id}`);
+      this.$router.push(`/car/book/${id}`);
     },
     goToOrders() {
       this.$router.push("/user/orders");
     },
+    goToCarMangement(){
+      this.$router.push("/car/management");
+    },
     goToAdmin() {
       this.$router.push("/user/admin");
     }
+  },
+  mounted() {
+    this.fetchCars()
   }
 };
 </script>

@@ -1,0 +1,148 @@
+<!-- filepath: /Users/apple/code/Car/car_front/src/components/CarManagement.vue -->
+<template>
+    <div class="car-management-container">
+      <h1 class="title">车辆管理</h1>
+  
+      <!-- 添加车辆 -->
+      <div class="add-car-section">
+        <h2>添加新车辆</h2>
+        <form @submit.prevent="addCar">
+          <input v-model="newCar.brand" placeholder="品牌" required />
+          <input v-model="newCar.model" placeholder="型号" required />
+          <input v-model.number="newCar.price" placeholder="价格 (万元)" type="number" required />
+          <input v-model.number="newCar.age" placeholder="车龄 (年)" type="number" required />
+          <input v-model="newCar.image" placeholder="图片链接" required />
+          <button type="submit" class="btn">添加车辆</button>
+        </form>
+      </div>
+  
+      <!-- 车辆列表 -->
+      <div class="car-list-section">
+        <h2>车辆列表</h2>
+        <div v-if="cars.length" class="car-list">
+          <div v-for="car in cars" :key="car.id" class="car-item">
+            <img :src="car.image" class="car-image" />
+            <div class="car-details">
+              <h3>{{ car.brand }} - {{ car.model }}</h3>
+              <p>价格: {{ car.price }} 万元</p>
+              <p>车龄: {{ car.age }} 年</p>
+              <button class="btn delete-button" @click="deleteCar(car.id)">删除</button>
+            </div>
+          </div>
+        </div>
+        <p v-else>暂无车辆信息。</p>
+      </div>
+    </div>
+  </template>
+  
+  <script>
+  import axios from 'axios';
+  export default {
+    data() {
+      return {
+        cars: [],
+        newCar: {
+          brand: "",
+          model: "",
+          price: null,
+          age: null,
+          image: ""
+        }
+      };
+    },
+    methods: {
+      async fetchCars() {
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/car/info/");
+        this.cars = response.data;
+      } catch (error) {
+        console.error("获取车辆信息失败:", error);
+      }
+      },
+      addCar() {
+        if (this.newCar.brand && this.newCar.model && this.newCar.price && this.newCar.age && this.newCar.image) {
+          const newId = this.cars.length ? this.cars[this.cars.length - 1].id + 1 : 1;
+          this.cars.push({ ...this.newCar, id: newId });
+          this.newCar = { brand: "", model: "", price: null, age: null, image: "" };
+          alert("车辆添加成功！");
+        } else {
+          alert("请填写完整的车辆信息！");
+        }
+      },
+      deleteCar(id) {
+        this.cars = this.cars.filter(car => car.id !== id);
+        alert("车辆已删除！");
+      }
+    },
+    mounted() {
+      this.fetchCars()
+    }
+  };
+  </script>
+  
+  <style scoped>
+  .car-management-container {
+    max-width: 900px;
+    margin: auto;
+    text-align: center;
+  }
+  
+  .title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .add-car-section form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .add-car-section input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .car-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .car-item {
+    width: 45%;
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+  
+  .car-image {
+    width: 100%;
+    border-radius: 5px;
+  }
+  
+  .btn {
+    padding: 10px 15px;
+    margin: 5px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .delete-button {
+    background-color: #dc3545;
+  }
+  
+  .delete-button:hover {
+    background-color: #a71d2a;
+  }
+  </style>

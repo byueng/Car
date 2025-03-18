@@ -7,6 +7,7 @@ import TestPage from './components/TestPage.vue';
 import RegisterPage from './components/RegisterPage.vue';
 import ProfilePage from './components/ProfilePage.vue';
 import ForgetPassword from './components/ForgetPassword.vue';
+import CarManagement from './components/CarMangement.vue';
 // third 
 import axios from 'axios';
 
@@ -36,7 +37,10 @@ const routes = [
     path: '/user/forget',
     component: ForgetPassword
   },
-
+  {
+    path: '/car/management',
+    component: CarManagement
+  }
 ]
 
 const router = createRouter({
