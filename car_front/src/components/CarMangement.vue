@@ -59,16 +59,21 @@
         console.error("获取车辆信息失败:", error);
       }
       },
-      addCar() {
-        if (this.newCar.brand && this.newCar.model && this.newCar.price && this.newCar.age && this.newCar.image) {
-          const newId = this.cars.length ? this.cars[this.cars.length - 1].id + 1 : 1;
-          this.cars.push({ ...this.newCar, id: newId });
+      async addCar() {
+      if (this.newCar.brand && this.newCar.model && this.newCar.price && this.newCar.age && this.newCar.image) {
+        try {
+          const response = await axios.post("http://127.0.0.1:8000/car/info/", this.newCar);
+          this.cars.push(response.data);
           this.newCar = { brand: "", model: "", price: null, age: null, image: "" };
           alert("车辆添加成功！");
-        } else {
-          alert("请填写完整的车辆信息！");
+        } catch (error) {
+          console.error("添加车辆失败:", error);
+          alert("添加车辆失败，请稍后重试！");
         }
-      },
+      } else {
+        alert("请填写完整的车辆信息！");
+      }
+    },
       deleteCar(id) {
         this.cars = this.cars.filter(car => car.id !== id);
         alert("车辆已删除！");
