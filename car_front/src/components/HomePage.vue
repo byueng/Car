@@ -17,7 +17,7 @@
       <input v-model="searchQuery" placeholder="搜索品牌/价格/车龄" class="search-box" />
       <div class="car-list">
         <div v-for="car in filteredCars" :key="car.id" class="car-item">
-          <img :src="car.image" class="car-image" />
+          <img :src="getImageUrl(car.image)" class="car-image" />
           <div class="car-details">
             <h3>{{ car.brand }} - {{ car.model }}</h3>
             <p>价格: {{ car.price }} 万元</p>
@@ -64,6 +64,12 @@ export default {
     }
   },
   methods: {
+    getImageUrl(imagePath) {
+      if (!imagePath) {
+        return ""; // 如果没有图片路径，返回空字符串
+      }
+      return `http://127.0.0.1:8000${imagePath}`;
+    },
     async fetchCars() {
       try {
         const response = await axios.get("http://127.0.0.1:8000/car/info/");
