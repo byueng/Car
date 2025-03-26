@@ -14,7 +14,29 @@
     <!-- 车辆管理 -->
     <div class="car-section">
       <h2>车辆信息</h2>
-      <input v-model="searchQuery" placeholder="搜索品牌/价格/车龄" class="search-box" />
+      <!-- <input v-model="searchQuery" placeholder="搜索品牌/价格/车龄" class="search-box" @input="searchCars"/> -->
+      <div class="search-section">
+        <select v-model="searchCriteria.brand" class="search-box" @change="fetchModels">
+          <option value="" disabled>选择品牌</option>
+          <option v-for="brand in brands" :key="brand" :value="brand">{{ brand }}</option>
+        </select>
+
+        <!-- 车型搜索 -->
+        <select v-model="searchCriteria.model" class="search-box" :disabled="!searchCriteria.brand">
+          <option value="" disabled>选择车型</option>
+          <option v-for="model in models" :key="model" :value="model">{{ model }}</option>
+        </select>
+
+        <!-- 价格搜索 -->
+        <input 
+          v-model="searchCriteria.price" 
+          placeholder="输入价格" 
+          class="search-box" 
+          type="number" 
+        />
+        <button class="btn" @click="searchCars">搜索</button>
+      </div>
+
       <div class="car-list">
         <div v-for="car in filteredCars" :key="car.id" class="car-item">
           <img :src="getImageUrl(car.image)" class="car-image" />
@@ -51,7 +73,14 @@ export default {
     return {
       searchQuery: "",
       isAdmin: false, // 假设从后端获取权限
-      cars: []
+      searchCriteria: {
+        brand: "", // 品牌
+        model: "", // 车型
+        price: "" // 价格
+      },
+      cars: [],
+      brands: [],
+      models: [],
     };
   },
   computed: {
@@ -64,6 +93,20 @@ export default {
     }
   },
   methods: {
+    async searchCars() {
+      try {
+        const params = {
+          brand: this.searchCriteria.brand || "",
+          model: this.searchCriteria.model || "",
+          price: this.searchCriteria.price || ""
+        };
+        const response = await axios.get("http://127.0.0.1:8000/car/search/", { params });
+        this.cars = Array.isArray(response.data) ? response.data : [];
+      } catch (error) {
+        console.error("搜索车辆信息失败:", error);
+        this.cars = [];
+      }
+    },
     getImageUrl(imagePath) {
       if (!imagePath) {
         return ""; // 如果没有图片路径，返回空字符串

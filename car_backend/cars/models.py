@@ -1,5 +1,6 @@
-from django.db import models
+import os
 
+from django.db import models
 # Create your models here.
 class CarInfo(models.Model):
     id = models.AutoField(primary_key=True)  # 自动生成的主键
@@ -11,3 +12,9 @@ class CarInfo(models.Model):
 
     def __str__(self):
         return f"{self.brand} ({self.age})"
+    
+    def delete(self, *args, **kwargs):
+        # 删除关联的图片文件
+        if self.image and os.path.isfile(self.image.path):
+            os.remove(self.image.path)
+        super().delete(*args, **kwargs)
