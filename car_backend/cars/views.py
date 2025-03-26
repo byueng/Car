@@ -28,7 +28,7 @@ class CarInfoView(APIView):
             "brand": "car_brand",
             "model": "car_model",
             "price": "car_price",
-            "year": "car_year",
+            "age": "car_year",
             "image": "image_url"    
         }
         """
