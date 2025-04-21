@@ -22,6 +22,34 @@ def test(request):
     '''
     return HttpResponse(f"test successfully, current time: {time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())}")
 
+class RemoveFavoriteView(APIView):
+    """
+    处理取消收藏车辆的请求
+    """
+    @csrf_exempt
+    def delete(self, request):
+        """
+        删除用户收藏的车辆
+        请求体格式：
+        {
+            "car_id": "车辆ID",
+            "user_id": "用户ID"
+        }
+        """
+        car_id = request.data.get('car_id')
+        user_id = request.data.get('user_id')
+
+        if not car_id or not user_id:
+            return Response({'message': '缺少 car_id 或 user_id'}, status=400)
+
+        try:
+            favorite = FavoriteCar.objects.filter(user_id=user_id, car_id=car_id)
+            favorite.delete()
+            return Response({'message': '取消收藏成功！'}, status=200)
+        except FavoriteCar.DoesNotExist:
+            return Response({'message': '收藏记录不存在！'}, status=404)
+        except Exception as e:
+            return Response({'message': f'取消收藏失败: {str(e)}'}, status=500)
 
 class ProfileView(APIView):
     # permission_classes = [IsAuthenticated]  
@@ -29,31 +57,50 @@ class ProfileView(APIView):
     # complete
     @csrf_exempt
     def get(self, request):
-        '''
-        Get Http request, return the user information to front
-
-        ProfileSerializer format:
-        {
-            "phone": "user_phone"
-            "email": "user_email"
-            "birthdate": "user_birthdate"
-        }
-
-        :param request: Http request object
-        :return Respone: Json type respone and the format is same as ProfileSerializer's with status 200 if successfully
-        '''
-        account = request.GET.get('account')
+        account = request.GET.get('id')
         try:
             if not account:
                 return Response({"message": "用户不存在"}, status=404)
-            else:
-                user = User.objects.get(account=account)
+
+            # 获取用户信息
+            user = User.objects.get(account=account)
+            try:
                 profile = Profile.objects.get(user=user)
-                serializers = ProfileSerializer(profile)
-                return Response(serializers.data, status=200)
-        except: 
-            return Response({'message': '出错了，请重试'}, status=404)     
-                       
+            except Profile.DoesNotExist:
+                return Response({"message": "用户资料不存在"}, status=404)
+
+            # 序列化用户信息
+            user_data = {
+                "account": user.account,
+                "email": profile.email,
+                "phone": profile.phone,
+                "birthdate": profile.birthdate.strftime('%Y-%m-%d') if profile.birthdate else None
+            }
+            favorite_cars = FavoriteCar.objects.filter(user=user).distinct()
+            car_ids = favorite_cars.values_list('car_id', flat=True)
+            cars = CarInfo.objects.filter(id__in=car_ids)
+            favorite_cars_data = [
+                {
+                    "car_id": car.id,
+                    "car_brand": car.brand,
+                    "car_model": car.model,
+                    "car_price": car.price,
+                    "car_image": f"http://localhost:8000{car.image.url}"
+                }
+                for car in cars
+            ]
+            # 返回数据
+            return Response({
+                "user": user_data,
+                "favorite_cars": favorite_cars_data
+            }, status=200)
+
+        except User.DoesNotExist:
+            return Response({'message': '用户不存在'}, status=404)
+        except Exception as e:
+            return Response({'message': '出错了，请重试', 'error': str(e)}, status=500)  
+
+
     @csrf_exempt
     def put(self, request):
         '''

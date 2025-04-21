@@ -40,7 +40,7 @@ const routes = [
   {
     path: '/car/management',
     component: CarManagement
-  }
+  },
 ]
 
 const router = createRouter({

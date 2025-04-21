@@ -21,3 +21,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = ['phone', 'email', 'birthdate']
         
+class FavoriteCarSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FavoriteCar
+        fields = ['user', 'car']

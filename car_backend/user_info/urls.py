@@ -16,4 +16,5 @@ urlpatterns = [
     path("register/", register),
     path("profile/", ProfileView.as_view(), name='profile'),
     path("forgetpassword/", forget_password),
+    path("remove_favorite/", RemoveFavoriteView.as_view())
 ]

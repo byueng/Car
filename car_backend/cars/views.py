@@ -7,8 +7,58 @@ from rest_framework import status
 from rest_framework.views import APIView
 from .serializer import CarInfo_Serializer
 from .models import CarInfo
+from user_info.models import FavoriteCar, User
 
 # Create your views here.
+
+class BookCarView(APIView):
+    @csrf_exempt
+    def post(self, request):
+        try:
+            user_id = request.data.get('user_id')
+            car_id = request.data.get('car_id')
+
+            if not user_id or not car_id:
+                return Response({'error': '用户ID或车辆ID缺失'}, status=400)
+
+            # 检查用户是否存在
+            user = User.objects.get(account=user_id)
+
+            # 检查车辆是否存在
+            car = CarInfo.objects.get(id=car_id)
+
+            # 创建预约记录
+            FavoriteCar.objects.create(user=user, car=car)
+
+            return Response({'message': '预约成功！'}, status=200)
+        except User.DoesNotExist:
+            return Response({'error': '用户不存在'}, status=404)
+        except CarInfo.DoesNotExist:
+            return Response({'error': '车辆不存在'}, status=404)
+        except Exception as e:
+            return Response({'error': str(e)}, status=500)
+
+
+class BrandListView(APIView):
+    @csrf_exempt
+    def get(self, request):
+        """
+        获取所有品牌的列表
+        """
+        brands = CarInfo.objects.values_list('brand', flat=True).distinct()
+        return Response(
+            {"brands": list(brands)},
+            status=status.HTTP_200_OK
+        )
+
+class ModelListView(APIView):
+    @csrf_exempt
+    def get(self, request):
+        models = CarInfo.objects.values_list('model', flat=True).distinct()
+        return Response(
+            {"models": list(models)},
+            status=status.HTTP_200_OK
+        )
 
 class CarInfoView(APIView):
     @csrf_exempt

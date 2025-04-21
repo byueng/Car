@@ -51,6 +51,7 @@ methods: {
         const data = response.data
         // 登录成功，存储 token 到 localStorage
         localStorage.setItem('token', data.token)
+        localStorage.setItem('account', this.account)
         this.message = response.data['message']
         this.messageType = 'success'
         setTimeout(() => {

@@ -1,4 +1,5 @@
 from django.db import models
+from cars.models import CarInfo
 
 class User(models.Model):
     account = models.CharField(
@@ -26,4 +27,11 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.account
 
-    
+
+class FavoriteCar(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="favorite_cars")
+    car = models.ForeignKey(CarInfo, on_delete=models.CASCADE, default=12)  # Set default value
+    car_details = models.TextField(help_text="Details of the car", blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.user.account} - {self.car.brand}:{self.car.model} {self.car.price}万元"
