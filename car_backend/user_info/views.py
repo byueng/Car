@@ -213,4 +213,164 @@ def forget_password(request):
             return JsonResponse({'message': '用户不存在'}, status=404)
     else:
         return JsonResponse({'message': 'Invalid request method'}, status=405)
+    
+@csrf_exempt
+def reserve(request):
+    """
+    预约接口
+    请求体格式:
+    {
+        "user_id": "用户ID",
+        "car_id": "车辆ID",
+        "name": "姓名",
+        "phone": "手机号",
+        "idcard": "身份证号",
+        "date": "预约日期(YYYY-MM-DD)",
+        "place": "预约地点"
+    }
+    """
+    if request.method == "POST":
+        try:
+            body = loads(request.body.decode('utf-8'))
+            user_id = body.get('user_id')
+            car_id = body.get('car_id')
+            name = body.get('name')
+            phone = body.get('phone')
+            idcard = body.get('idcard')
+            date = body.get('date')
+            place = body.get('place')
+
+            if not all([user_id, car_id, name, phone, idcard, date, place]):
+                return JsonResponse({'message': '缺少必要参数'}, status=400)
+
+            user = User.objects.get(account=user_id)
+            car = CarInfo.objects.get(id=car_id)
+
+            reserve = Reserve.objects.create(
+                user=user,
+                car=car,
+                name=name,
+                phone=phone,
+                idcard=idcard,
+                date=date,
+                place=place
+            )
+
+            return JsonResponse({
+                'message': '预约成功',
+                'reserve_id': reserve.id,
+                'reserve_info': {
+                    'user': user.account,
+                    'car': f"{car.brand} {car.model}",
+                    'name': name,
+                    'phone': phone,
+                    'idcard': idcard,
+                    'date': date,
+                    'place': place
+                }
+            }, status=201)
+        except User.DoesNotExist:
+            return JsonResponse({'message': '用户不存在'}, status=404)
+        except CarInfo.DoesNotExist:
+            return JsonResponse({'message': '车辆不存在'}, status=404)
+        except Exception as e:
+            return JsonResponse({'message': f'预约失败: {str(e)}'}, status=500)
+    else:
+        return JsonResponse({'message': '错误的请求类型'}, status=405)
+
+@csrf_exempt
+def reserveinfo(request):
+    """
+    查询预约详情接口
+    GET 参数:
+        userId: 用户ID
+        carId: 车辆ID
+    返回:
+        预约详情或未找到提示
+    """
+    if request.method == "GET":
+        user_id = request.GET.get('userId')
+        car_id = request.GET.get('carId')
+
+        if not user_id or not car_id:
+            return JsonResponse({'message': '缺少 userId 或 carId'}, status=400)
+
+        try:
+            user = User.objects.get(account=user_id)
+            car = CarInfo.objects.get(id=car_id)
+            reserve = Reserve.objects.filter(user=user, car=car).order_by('-id').first()
+            if not reserve:
+                return JsonResponse({'message': '未找到预约记录'}, status=404)
+
+            reserve_info = {
+                'reserve_id': reserve.id,
+                'user': user.account,
+                'car': {
+                    'id': car.id,
+                    'brand': car.brand,
+                    'model': car.model,
+                    'price': str(car.price),
+                    'age': car.age,
+                    'image': request.build_absolute_uri(car.image.url) if car.image else None
+                },
+                'name': reserve.name,
+                'phone': reserve.phone,
+                'idcard': reserve.idcard,
+                'date': str(reserve.date),
+                'place': reserve.place,
+                'created_at': reserve.created_at.strftime('%Y-%m-%d %H:%M:%S') if hasattr(reserve, 'created_at') else ''
+            }
+            return JsonResponse({'message': '查询成功', 'reserve_info': reserve_info}, status=200)
+        except User.DoesNotExist:
+            return JsonResponse({'message': '用户不存在'}, status=404)
+        except CarInfo.DoesNotExist:
+            return JsonResponse({'message': '车辆不存在'}, status=404)
+        except Exception as e:
+            return JsonResponse({'message': f'查询失败: {str(e)}'}, status=500)
+    else:
+        return JsonResponse({'message': '错误的请求类型'}, status=405)
+
+@csrf_exempt
+def order(request):
+    """
+    下单接口
+    请求体格式:
+    {
+        "user_id": "用户ID",
+        "car_id": "车辆ID",
+        "price": "成交价格",
+        "remark": "备注（可选）"
+    }
+    """
+    if request.method == 'get':
+        try:
+            body = loads(request.body.decode('utf-8'))
+            user_id = body.get('user_id')
+            car_id = body.get('car_id')
+            price = body.get('price')
+            remark = body.get('remark', '')
+
+            if not user_id or not car_id or not price:
+                return JsonResponse({'message': '缺少必要参数'}, status=400)
+
+            user = User.objects.get(account=user_id)
+            car = CarInfo.objects.get(id=car_id)
+
+            # 假设你有一个 Order 模型
+            order = Order.objects.create(
+                user=user,
+                car=car,
+                price=price,
+                remark=remark
+            )
+
+            return JsonResponse({'message': '下单成功', 'order_id': order.id}, status=201)
+        except User.DoesNotExist:
+            return JsonResponse({'message': '用户不存在'}, status=404)
+        except CarInfo.DoesNotExist:
+            return JsonResponse({'message': '车辆不存在'}, status=404)
+        except Exception as e:
+            return JsonResponse({'message': f'下单失败: {str(e)}'}, status=500)
+    else:
+        return JsonResponse({'message': '错误的请求类型'}, status=405)
 

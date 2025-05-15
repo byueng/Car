@@ -119,7 +119,7 @@ class CarSearchView(APIView):
         print(f"品牌: {brand}, 车型: {model}, 价格: {price}")
 
         # 构建查询条件
-        filters = {}
+        filters = {} 
         if brand:
             filters['brand__icontains'] = brand  # 模糊匹配品牌
         if price:
