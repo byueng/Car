@@ -8,6 +8,8 @@ import RegisterPage from './components/RegisterPage.vue';
 import ProfilePage from './components/ProfilePage.vue';
 import ForgetPassword from './components/ForgetPassword.vue';
 import CarManagement from './components/CarMangement.vue';
+import CarOrder from './components/CarOrder.vue';
+import ReservePage from './components/ReservePage.vue';
 // third 
 import axios from 'axios';
 
@@ -40,6 +42,14 @@ const routes = [
   {
     path: '/car/management',
     component: CarManagement
+  },
+  {
+    path: '/user/orders',
+    component: CarOrder
+  },
+  {
+    path: '/user/reserve',
+    component: ReservePage
   },
 ]
 

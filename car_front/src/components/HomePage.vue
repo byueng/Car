@@ -51,7 +51,7 @@
             <h3>{{ car.brand }} - {{ car.model }}</h3>
             <p>价格: {{ car.price }} 万元</p>
             <p>车龄: {{ car.age }} 年</p>
-            <button class="btn" @click="bookCar(car.id)">预约看车</button>
+            <button class="btn" @click="gotoReserve(car.id)">预约看车</button>
           </div>
         </div>
       </div>
@@ -150,7 +150,6 @@ export default {
         this.goToLogin(); // 跳转到登录页面
         return;
       }
-
       // 如果用户已登录，发送预约请求
       try {
     // 如果用户已登录，发送预约请求
@@ -206,6 +205,28 @@ export default {
     },
     goToAdmin() {
       this.$router.push("/user/admin");
+    },
+    async gotoReserve(carId){
+      const token = localStorage.getItem('token'); // 检查是否有登录的 token
+      if (!token) {
+        alert('请先登录后再预约车辆！');
+        this.goToLogin(); // 跳转到登录页面
+        return;
+      }
+      // 如果用户已登录，发送预约请求
+      try {
+     // 如果用户已登录，发送预约请求
+      const response = await axios.post("http://localhost:8000/car/bookcar/", {
+        user_id: localStorage.getItem('account'),
+        car_id: carId,
+      });
+      // 请求成功后的处理
+      console.log(response.data.message);
+    } catch (error) {
+      // 捕获错误并处理
+      console.error('预约失败:', error);
+    }
+      this.$router.push({path: "/user/reserve", query: {car_id: carId}})
     },
     goToProfile(){
       const account = localStorage.getItem('account')
